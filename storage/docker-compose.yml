@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  webserver:
+    image: nginx:latest
+    ports:
+      - 8080:80
+      - 8081:443
+    restart: always
+    volumes:
+      - ./nginx/conf/:/etc/nginx/conf.d/:ro
+      - ./static/:/var/www/html/:ro
+      - ./ssl:/etc/ssl
