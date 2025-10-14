@@ -6,6 +6,7 @@ services:
       - 8081:443
     restart: always
     volumes:
-      - ./nginx/conf/:/etc/nginx/conf.d/:ro
-      - ./static/:/var/www/html/:ro
-      - ./ssl:/etc/ssl
+      - ./nginx/conf/:/etc/nginx/conf.d:ro,z
+      - ./static/:/var/www/html:ro,z
+      - ./ssl:/etc/ssl:ro,z
+      - /data:/data:ro,z
