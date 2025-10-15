@@ -36,6 +36,7 @@ and from the gateway to anywhere via a LetsEncrypt certificate
       with the hostname of the storage server.
    2. Replace the `allow` lines with ones allowing access to the IP range(s) of the gateway server.
    3. Replace the `root /data` with `root` followed by the path to where the data you want to serve live.
+      Make a note of this path, as it will be needed below.
 
 6. Start the daemon:
    ```
@@ -58,34 +59,45 @@ and from the gateway to anywhere via a LetsEncrypt certificate
    cd gateway
    ```
 
-4. Start the servers
+4. Edit the `docker-compose.yml` file,
+   setting `OAUTH2_PROXY_COOKIE_SECRET` and `OAUTH2_PROXY_CLIENT_SECRET`
+   to arbitrary secret values.
+
+5. Edit the `nginx/conf/app.conf` file,
+   replacing `uklft-dg.swansea.ac.uk` with the domain name
+   that will be used to access the storage element publicly,
+   replacing `lattice-storage-park.swansea.ac.uk`
+   with the hostname of the storage server,
+   and replacing `/data` with the path to your data on the latter machine.
+
+6. Start the servers
    ```
    podman compose up -d
    ```
 
-4. Register with LetsEncrypt,
+7. Register with LetsEncrypt,
    giving the hostnames of the gateway server as arguments
    ```
    ./get_certificate.sh ildg-gateway.example.net ildg-gateway.example.org
    ```
 
-5. Edit `nginx/conf/app.conf`
+8. Edit `nginx/conf/app.conf`
 
    1. Replace `uklft-dg.swan.ac.uk`, `uklft-dg.swansea.ac.uk`, and `uklft-dg.abertawe.ac.uk`
       with the hostname of the gateway server.
    2. Replace `lattice-storage-park.swansea.ac.uk` with the hostname of the storage server.
 
-6. Restart the server
+9. Restart the server
 
    ```
    podman compose restart
    ```
 
-6. Edit your `crontab`
+10. Edit your `crontab`
 
-   1. Start the server with `podman compose up -d` on each boot
+    1. Start the server with `podman compose up -d` on each boot
 
-   2. Renew the SSL certificate with `podman compose run --rm certbot renew` every month.
+    2. Renew the SSL certificate with `podman compose run --rm certbot renew` every month.
 
-   In each case,
-   this needs to run in the `gateway` directory.
+    In each case,
+    this needs to run in the `gateway` directory.
