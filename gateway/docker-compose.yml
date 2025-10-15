@@ -3,33 +3,36 @@ services:
     image: nginx:latest
     ports:
       - 80:80
+      - 443:443
     restart: always
     volumes:
       - ./nginx/conf/:/etc/nginx/conf.d/:ro
       - ./static/:/var/www/html/:ro
       - ./certbot/www/:/var/www/certbot/:ro
-      - ./certbot/conf/:/etc/nginx/ssl/:ro
+      - ./certbot/conf/:/etc/letsencrypt/:ro
   certbot:
     image: certbot/certbot:latest
     volumes:
       - ./certbot/www/:/var/www/certbot/:rw
       - ./certbot/conf/:/etc/letsencrypt/:rw
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"  # Renew certificates every 12 hours
   oauth2-proxy:
-    image: bitnami/oauth2-proxy
+    build: oauth2-proxy
     environment:
       - OAUTH2_PROXY_PROVIDER=oidc
-      - OAUTH2_PROXY_PROVIDER_DISPLAY_NAME="IAM-ILDG INFN"
+      - OAUTH2_PROXY_PROVIDER_DISPLAY_NAME=IAM-ILDG INFN
       - OAUTH2_PROXY_OIDC_ISSUER_URL=https://iam-ildg.cloud.cnaf.infn.it/
       - OAUTH2_PROXY_REVERSE_PROXY=true
       - OAUTH2_PROXY_SKIP_JWT_BEARER_TOKENS=true
-      - OAUTH2_PROXY_EXTRA_JWT_ISSUERS="iam-ildg.cloud.cnaf.infn.it=ildg"
-      - OAUTH2_PROXY_FORCE_HTTPS=true
-      - OAUTH2_PROXY_UPSTREAM=https://lattice-storage-park.swansea.ac.uk:8181
-      - OAUTH2_PROXY_HTTP_ADDRESS=http://0.0.0.0:443
-      - OAUTH2_PROXY_TLS_CERT_FILE=/etc/letsencrypt/live/uklft-dg.swansea.ac.uk/fullchain.pem
-      - OAUTH2_PROXY_TLS_KEY_FILE=/etc/letsencrypt/live/uklft-dg.swansea.ac.uk/privkey.pem
-    volumes:
-      - ./certbot/conf/:/etc/letsencrypt:ro
+      - OAUTH2_PROXY_EXTRA_JWT_ISSUERS=https://iam-ildg.cloud.cnaf.infn.it/=https://wlcg.cern.ch/jwt/v1/any
+      - OAUTH2_PROXY_HTTP_ADDRESS=http://0.0.0.0:8082
+      - OAUTH2_PROXY_COOKIE_SECRET=enter_arbitrary_secret_here
+      - OAUTH2_PROXY_CLIENT_ID=basic_ildg_storage_element
+      - OAUTH2_PROXY_CLIENT_SECRET=enter_different_arbitrary_secret_here
+      - OAUTH2_PROXY_EMAIL_DOMAINS=*
+      - OAUTH2_PROXY_BEARER_TOKEN_LOGIN_FALLBACK=false
     command:
-      - --http-address=0.0.0.0:443
-      - --upstream=https://lattice-storage-park.swansea.ac.uk:8181
+      - --http-address=0.0.0.0:8082
+    volumes:
+      - ./certbot/conf/:/etc/letsencrypt/:ro
+    user: 0:0

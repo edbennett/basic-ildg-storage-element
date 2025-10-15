@@ -14,4 +14,4 @@ do
   DOMAIN_CMD="-d ${DOMAIN} ${DOMAIN_CMD}"
 done
 
-docker compose run --rm certbot certonly --webroot --webroot-path /var/www/certbot/ --dry-run ${DOMAIN_CMD}
+docker compose run --rm certbot certonly --webroot --webroot-path /var/www/certbot/ --agree-tos --no-eff-email ${DOMAIN_CMD}
