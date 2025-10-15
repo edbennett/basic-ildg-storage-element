@@ -9,6 +9,7 @@ services:
       - ./nginx/conf/:/etc/nginx/conf.d:ro,z,noexec
       - ./static/:/var/www/html:ro,z,noexec
       - ./ssl:/etc/ssl:ro,z,noexec
+      # Replace this with the path to your data
       - /data:/data:ro,noexec
     security_opt:
       label: disable
