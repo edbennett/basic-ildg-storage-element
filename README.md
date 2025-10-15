@@ -6,7 +6,8 @@ Intended setup:
 - A gateway server on the same network but with inbound internet access
 
 Files will be served from the server only to the gateway via HTTPS with a self-signed certificate,
-and from the gateway to anywhere via a LetsEncrypt certificate
+and from the gateway to anywhere via a LetsEncrypt certificate,
+only to clients authenticating with ILDG tokens.
 
 ## Setup
 
