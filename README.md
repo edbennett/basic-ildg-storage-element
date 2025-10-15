@@ -73,7 +73,7 @@ only to clients authenticating with ILDG tokens.
 
 6. Start the servers
    ```
-   podman compose up -d
+   docker compose up -d
    ```
 
 7. Register with LetsEncrypt,
@@ -91,7 +91,7 @@ only to clients authenticating with ILDG tokens.
 9. Restart the server
 
    ```
-   podman compose restart
+   docker compose restart
    ```
 
 10. Edit your `crontab` to start the server with `podman compose up -d` on each boot
