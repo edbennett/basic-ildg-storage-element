@@ -93,11 +93,4 @@ and from the gateway to anywhere via a LetsEncrypt certificate
    podman compose restart
    ```
 
-10. Edit your `crontab`
-
-    1. Start the server with `podman compose up -d` on each boot
-
-    2. Renew the SSL certificate with `podman compose run --rm certbot renew` every month.
-
-    In each case,
-    this needs to run in the `gateway` directory.
+10. Edit your `crontab` to start the server with `podman compose up -d` on each boot
