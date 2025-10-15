@@ -58,6 +58,11 @@ and from the gateway to anywhere via a LetsEncrypt certificate
    cd gateway
    ```
 
+4. Start the servers
+   ```
+   podman compose up -d
+   ```
+
 4. Register with LetsEncrypt,
    giving the hostnames of the gateway server as arguments
    ```
@@ -70,10 +75,10 @@ and from the gateway to anywhere via a LetsEncrypt certificate
       with the hostname of the gateway server.
    2. Replace `lattice-storage-park.swansea.ac.uk` with the hostname of the storage server.
 
-6. Start the server
+6. Restart the server
 
    ```
-   podman compose up -d
+   podman compose restart
    ```
 
 6. Edit your `crontab`
