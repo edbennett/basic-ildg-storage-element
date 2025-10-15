@@ -6,7 +6,9 @@ services:
       - 8081:443
     restart: always
     volumes:
-      - ./nginx/conf/:/etc/nginx/conf.d:ro,z
-      - ./static/:/var/www/html:ro,z
-      - ./ssl:/etc/ssl:ro,z
-      - /data:/data:ro,z
+      - ./nginx/conf/:/etc/nginx/conf.d:ro,z,noexec
+      - ./static/:/var/www/html:ro,z,noexec
+      - ./ssl:/etc/ssl:ro,z,noexec
+      - /data:/data:ro,noexec
+    security_opt:
+      label: disable
